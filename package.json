@@ -1,0 +1,23 @@
+{
+  "name": "image_optimization",
+  "version": "1.0.0",
+  "description": "create image optimizer application in electron js",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "nodemon --exec electron ."
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "Muhammad Husnain",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^9.0.0"
+  }
+}
