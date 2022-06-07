@@ -19,12 +19,12 @@
   "author": "Muhammad Husnain",
   "license": "MIT",
   "devDependencies": {
+    "compress-images": "^2.0.5",
     "electron": "^9.0.0"
   },
   "dependencies": {
-    "imagemin": "^8.0.1",
-    "imagemin-mozjpeg": "^10.0.0",
-    "imagemin-pngquant": "^9.0.2",
+    "gifsicle": "^5.2.1",
+    "pngquant-bin": "^6.0.1",
     "slash": "^4.0.0"
   }
 }

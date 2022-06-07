@@ -1,7 +1,7 @@
 const path = require("path");
 const os = require("os");
-const { app, BrowserWindow, Menu, ipcMain, shell } = require("electron");
-const imageminPngquant = require("imagemin-pngquant");
+const { app, BrowserWindow, ipcMain, shell } = require("electron");
+const compress_images = require("compress-images");
 // SET ENV
 process.env.NODE_ENV = "development";
 
@@ -48,29 +48,37 @@ const menu = [
 // }
 
 ipcMain.on("image:minimize", (e, opt) => {
-  opt.dest = path.join(os.homedir(), "Desktop//imageShrink");
+  console.log({ opt });
+  opt.dest = path.join(os.homedir(), "Desktop//imageShrink//");
   shrinkImage(opt);
 });
 
 async function shrinkImage({ imgPath, quality, dest }) {
   try {
-    console.log({ imgPath, quality, dest });
-
-    const imagemin = await import("imagemin");
-    const imageminMozjpeg = await import("imagemin-mozjpeg");
     const slash = await import("slash");
+    compress_images(
+      slash.default(imgPath),
+      dest,
+      { compress_force: false, statistic: true, autoupdate: true },
+      false,
+      { jpg: { engine: "mozjpeg", command: ["-quality", quality] } },
+      { png: { engine: "pngquant", command: ["--quality=20-50", "-o"] } },
+      { svg: { engine: "svgo", command: "--multipass" } },
+      {
+        gif: {
+          engine: "gifsicle",
+          command: ["--colors", "64", "--use-col=web"],
+        },
+      },
+      function (error, completed, statistic) {
+        console.log("-------------");
+        console.log(error);
+        console.log(completed);
+        console.log(statistic);
+        console.log("-------------");
+      }
+    );
 
-    const pngQuality = quality / 100;
-    const files = await imagemin.default([slash.default(imgPath)], {
-      destination: dest,
-      plugin: [
-        imageminMozjpeg.default({ quality }),
-        imageminPngquant.default({
-          quality: [pngQuality, pngQuality],
-        }),
-      ],
-    });
-    console.log(files);
     shell.openPath(dest);
   } catch (error) {
     console.log(error);

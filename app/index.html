@@ -70,7 +70,6 @@
 
         const imgPath = img.files[0].path;
         const quality = slider.value;
-        console.log({ imgPath, quality });
         ipcRenderer.send("image:minimize", {
           imgPath,
           quality,
