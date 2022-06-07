@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "create image optimizer application in electron js",
   "main": "main.js",
+  "type": "",
   "scripts": {
     "start": "electron .",
     "dev": "nodemon --exec electron ."
@@ -19,5 +20,11 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^9.0.0"
+  },
+  "dependencies": {
+    "imagemin": "^8.0.1",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^9.0.2",
+    "slash": "^4.0.0"
   }
 }

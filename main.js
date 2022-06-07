@@ -1,8 +1,7 @@
-// Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
-
-console.log("object");
+const os = require("os");
+const { app, BrowserWindow, Menu, ipcMain, shell } = require("electron");
+const imageminPngquant = require("imagemin-pngquant");
 // SET ENV
 process.env.NODE_ENV = "development";
 
@@ -19,6 +18,7 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
+      contextIsolation: false,
     },
   });
   mainWindow.loadFile("./app/index.html");
@@ -48,8 +48,34 @@ const menu = [
 // }
 
 ipcMain.on("image:minimize", (e, opt) => {
-  console.log(opt);
+  opt.dest = path.join(os.homedir(), "Desktop//imageShrink");
+  shrinkImage(opt);
 });
+
+async function shrinkImage({ imgPath, quality, dest }) {
+  try {
+    console.log({ imgPath, quality, dest });
+
+    const imagemin = await import("imagemin");
+    const imageminMozjpeg = await import("imagemin-mozjpeg");
+    const slash = await import("slash");
+
+    const pngQuality = quality / 100;
+    const files = await imagemin.default([slash.default(imgPath)], {
+      destination: dest,
+      plugin: [
+        imageminMozjpeg.default({ quality }),
+        imageminPngquant.default({
+          quality: [pngQuality, pngQuality],
+        }),
+      ],
+    });
+    console.log(files);
+    shell.openPath(dest);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

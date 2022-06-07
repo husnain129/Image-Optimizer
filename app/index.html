@@ -60,13 +60,17 @@
       const slider = gid("slider");
       const img = gid("img");
 
-      gid("output-path").innerText = path.join(os.homedir(), "imageShrink");
+      gid("output-path").innerText = path.join(
+        os.homedir(),
+        "Desktop//imageShrink"
+      );
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
 
         const imgPath = img.files[0].path;
         const quality = slider.value;
+        console.log({ imgPath, quality });
         ipcRenderer.send("image:minimize", {
           imgPath,
           quality,
